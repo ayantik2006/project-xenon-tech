@@ -1,6 +1,11 @@
+"use client";
+
 import DiagonalPattern from "@/components/DiagonalPattern";
+import { Input } from "@base-ui/react";
+import axios from "axios";
 import {
   Award,
+  Bell,
   Bot,
   BriefcaseBusiness,
   Building2,
@@ -11,10 +16,14 @@ import {
   ToolCase,
   Workflow,
 } from "lucide-react";
-import Image from "next/image";
+import { toast } from "sonner";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Home() {
+  const [email, setEmail] = useState("");
+  const [isSubscribing, setIsSubscribing] = useState(false);
+
   return (
     <div className="bg-[#050404] min-h-screen min-w-scree">
       <div className="min-h-screen max-w-200 mx-auto flex justify-between">
@@ -44,6 +53,62 @@ export default function Home() {
               </Link>
             </div> */}
             <DiagonalPattern width={"100%"} height={6} className="my-4" />
+          </div>
+          <div className="flex flex-col gap-5">
+            <div className="flex items-center gap-2">
+              <Bell size={20} className="stroke-amber-400 fill-amber-400" />
+              <h1 className="font-semibold text-xl">Stay Updated</h1>
+            </div>
+            <p className="text-neutral-300 mx-7">
+              Get notified when we launch new products, publish engineering
+              articles, or release major updates.
+            </p>
+            <form
+              className="flex items-center mx-7"
+              onSubmit={async (e) => {
+                e.preventDefault();
+                setIsSubscribing(true);
+                try {
+                  await axios.post(
+                    "https://www.formas.space/api/submit/FAS-+rm6MVT3RiE+BXgQmh8+WVp",
+                    {
+                      email,
+                    },
+                  );
+                  toast("You're on the list!", {
+                    description:
+                      "We'll keep you updated with new products and launches.",
+                  });
+                  setEmail("");
+                  setIsSubscribing(false);
+                  e.currentTarget.focus();
+                } catch (err) {
+                  setIsSubscribing(false);
+                  console.log(err);
+                }
+              }}
+            >
+              <Input
+                className={
+                  "w-full border-2 px-2 py-1.5 rounded-l-md placeholder:text-sm text-sm"
+                }
+                name="email"
+                required
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.currentTarget.value);
+                }}
+                placeholder="example@gmail.com"
+              />
+              <button
+                className={`bg-white text-black py-[0.35rem] px-2 font-semibold rounded-r-md cursor-pointer ${isSubscribing?"pointer-events-none opacity-90":""}`}
+                type="submit"
+              >
+                {isSubscribing?"Waiting...":"Subscribe"}
+              </button>
+            </form>
+
+            <DiagonalPattern width={"100%"} height={6} />
           </div>
           <div className="flex flex-col gap-5">
             <div className="flex items-center gap-2">
@@ -161,7 +226,10 @@ export default function Home() {
             </div>
             <p className="text-neutral-300 mx-7">
               Contact us as{" "}
-              <a href="mailto:ayantik.sarkar2020@gmail.com" className="font-semibold">
+              <a
+                href="mailto:ayantik.sarkar2020@gmail.com"
+                className="font-semibold"
+              >
                 ayantik.sarkar2020@gmail.com
               </a>
             </p>

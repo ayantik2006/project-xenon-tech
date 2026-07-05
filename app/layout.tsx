@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -112,7 +113,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased selection:bg-white selection:text-black`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased selection:bg-white selection:text-black ${geistMono.className}`}
     >
       <head>
         <Script id="gtm-script" strategy="afterInteractive">
@@ -140,7 +141,20 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <Toaster
+          position="top-center"
+          theme="dark"
+          toastOptions={{
+            style: {
+              background: "#09090b",
+              color: "#fafafa",
+              border: "1px solid #27272a",
+            },
+          }}
+        />
+      </body>
     </html>
   );
 }
